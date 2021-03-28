@@ -82,22 +82,23 @@ public abstract class AbstractBinTree<T> implements BinTree<T> {
         }
     }
 
+    private BinTree<T> getFirstForLrd() {
+        BinTree<T> first = this;
+        while (true){
+            first = first.getLeftest();
+            if (Objects.isNull(first.getRight())) {
+                break;
+            } else {
+                first = first.getRight();
+            }
+        }
+        return first;
+    }
+
     protected class LrdIterator<T> extends AbstractBinTreeIterator<T> {
 
-        private static <T> BinTree<T> getFirst(BinTree<T> first) {
-            while (true){
-                first = first.getLeftest();
-                if (Objects.isNull(first.getRight())) {
-                    break;
-                } else {
-                    first = first.getRight();
-                }
-            }
-            return first;
-        }
-
         protected LrdIterator() {
-            super(getFirst(AbstractBinTree.this));
+            super(AbstractBinTree.this.getFirstForLrd());
         }
 
         @Override
