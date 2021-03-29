@@ -62,21 +62,18 @@ public abstract class AbstractBinTree<T> implements BinTree<T> {
             if (Objects.nonNull(before)) {
                 if (Objects.nonNull(before.getLeft())) {
                     next = before.getLeft();
-                    return;
-                }
-                if (Objects.nonNull(before.getRight())) {
+                } else if (Objects.nonNull(before.getRight())) {
                     next = before.getRight();
-                    return;
-                }
-                BinTree<T> parent = before.getParent();
-                while (Objects.nonNull(parent) && parent.getRight() == before) {
-                    before = parent;
-                    parent = before.getParent();
-                }
-                if (Objects.nonNull(parent)) {
-                    next = parent.getRight();
                 } else {
-                    before = null;
+                    BinTree<T> parent = before.getParent();
+                    BinTree<T> ch = this.before;
+                    while (Objects.nonNull(parent) && (parent.getRight() == ch || Objects.isNull(parent.getRight()))) {
+                        ch = parent;
+                        parent = ch.getParent();
+                    }
+                    if (Objects.nonNull(parent)) {
+                        next = parent.getRight();
+                    }
                 }
             }
         }
@@ -95,9 +92,10 @@ public abstract class AbstractBinTree<T> implements BinTree<T> {
                     next = before.getRight().getLeftest();
                 } else {
                     BinTree<T> parent = before.getParent();
-                    while (Objects.nonNull(parent) && parent.getRight() == before) {
-                        before = parent;
-                        parent = before.getParent();
+                    BinTree<T> ch = this.before;
+                    while (Objects.nonNull(parent) && parent.getRight() == ch) {
+                        ch = parent;
+                        parent = ch.getParent();
                     }
                     next = parent;
                 }

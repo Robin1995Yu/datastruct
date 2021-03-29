@@ -13,17 +13,23 @@ public class LinkedBinTreeTest extends TestCase {
     private static final String ROOT = "root";
     private static final String LEFT = "left";
     private static final String RIGHT = "right";
+    private static final String LEFT_LEFT = "leftLeft";
+    private static final String RIGHT_RIGHT = "rightRight";
     private static final String CHANGE = "CHANGE";
 
     private BinTree<String> tree = new LinkedBinTree<>(ROOT);
     private BinTree<String> left = new LinkedBinTree<>(LEFT);
     private BinTree<String> right = new LinkedBinTree<>(RIGHT);
+    private BinTree<String> leftLeft = new LinkedBinTree<>(LEFT_LEFT);
+    private BinTree<String> rightRight = new LinkedBinTree<>(RIGHT_RIGHT);
 
     @Before
     public void before() {
         tree.setValue(ROOT);
         tree.setLeft(null);
         tree.setRight(null);
+        left.setLeft(null);
+        right.setRight(null);
     }
 
     public void testGetInstance() {
@@ -72,12 +78,16 @@ public class LinkedBinTreeTest extends TestCase {
     public void testDlrIterator() {
         tree.setLeft(left);
         tree.setRight(right);
+        left.setLeft(leftLeft);
+        right.setRight(rightRight);
         Iterator<BinTree<String>> it = tree.dlrIterator();
-        List<BinTree<String>> ans = new ArrayList<>(3);
+        List<BinTree<String>> ans = new ArrayList<>(5);
         ans.add(tree);
         ans.add(left);
+        ans.add(leftLeft);
         ans.add(right);
-        List<BinTree<String>> res = new ArrayList<>(3);
+        ans.add(rightRight);
+        List<BinTree<String>> res = new ArrayList<>(5);
         while (it.hasNext()) {
             res.add(it.next());
         }
@@ -87,12 +97,16 @@ public class LinkedBinTreeTest extends TestCase {
     public void testLdrIterator() {
         tree.setLeft(left);
         tree.setRight(right);
+        left.setLeft(leftLeft);
+        right.setRight(rightRight);
         Iterator<BinTree<String>> it = tree.ldrIterator();
-        List<BinTree<String>> ans = new ArrayList<>(3);
+        List<BinTree<String>> ans = new ArrayList<>(5);
+        ans.add(leftLeft);
         ans.add(left);
         ans.add(tree);
         ans.add(right);
-        List<BinTree<String>> res = new ArrayList<>(3);
+        ans.add(rightRight);
+        List<BinTree<String>> res = new ArrayList<>(5);
         while (it.hasNext()) {
             res.add(it.next());
         }
@@ -102,12 +116,16 @@ public class LinkedBinTreeTest extends TestCase {
     public void testLrdIterator() {
         tree.setLeft(left);
         tree.setRight(right);
+        left.setLeft(leftLeft);
+        right.setRight(rightRight);
         Iterator<BinTree<String>> it = tree.lrdIterator();
-        List<BinTree<String>> ans = new ArrayList<>(3);
+        List<BinTree<String>> ans = new ArrayList<>(5);
+        ans.add(leftLeft);
         ans.add(left);
+        ans.add(rightRight);
         ans.add(right);
         ans.add(tree);
-        List<BinTree<String>> res = new ArrayList<>(3);
+        List<BinTree<String>> res = new ArrayList<>(5);
         while (it.hasNext()) {
             res.add(it.next());
         }
