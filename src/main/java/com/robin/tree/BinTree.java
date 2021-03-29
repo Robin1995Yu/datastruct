@@ -9,17 +9,25 @@ import java.util.Objects;
 public interface BinTree<T> {
     T getValue();
 
+    T setValue(T value);
+
     BinTree<T> getParent();
 
     BinTree<T> getLeft();
 
+    BinTree<T> setLeft(BinTree<T> left);
+
     BinTree<T> getRight();
 
-    Iterator<T> dlrIterator();
+    BinTree<T> setRight(BinTree<T> right);
 
-    Iterator<T> ldrIterator();
+    Iterator<BinTree<T>> dlrIterator();
 
-    Iterator<T> lrdIterator();
+    Iterator<BinTree<T>> ldrIterator();
+
+    Iterator<BinTree<T>> lrdIterator();
+
+    Iterator<BinTree<T>> levelIterator();
 
     default BinTree<T> getLeftest() {
         BinTree<T> result = this;

@@ -1,14 +1,31 @@
 package com.robin.tree;
 
-import sun.jvm.hotspot.oops.BranchData;
-
-import java.io.FileReader;
-import java.util.AbstractList;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Objects;
 
 public abstract class AbstractBinTree<T> implements BinTree<T> {
 
+    @Override
+    public Iterator<BinTree<T>> dlrIterator() {
+        return new DlrIterator<>();
+    }
+
+    @Override
+    public Iterator<BinTree<T>> ldrIterator() {
+        return new LdrIterator<>();
+    }
+
+    @Override
+    public Iterator<BinTree<T>> lrdIterator() {
+        return new LrdIterator<>();
+    }
+
+    @Override
+    public Iterator<BinTree<T>> levelIterator() {
+        return new LevelIterator<>();
+    }
 
     private abstract class AbstractBinTreeIterator<T> implements Iterator<BinTree<T>> {
         protected BinTree<T> before;
@@ -22,6 +39,16 @@ public abstract class AbstractBinTree<T> implements BinTree<T> {
         public boolean hasNext() {
             return Objects.nonNull(next);
         }
+
+        @Override
+        public BinTree<T> next() {
+            before = next;
+            next = null;
+            getNext();
+            return before;
+        }
+
+        protected abstract void getNext();
     }
 
     protected class DlrIterator<T> extends AbstractBinTreeIterator<T> {
@@ -31,15 +58,15 @@ public abstract class AbstractBinTree<T> implements BinTree<T> {
         }
 
         @Override
-        public BinTree<T> next() {
-            before = next;
-            next = null;
+        protected void getNext() {
             if (Objects.nonNull(before)) {
-                if (Objects.nonNull(next.getLeft())) {
+                if (Objects.nonNull(before.getLeft())) {
                     next = before.getLeft();
+                    return;
                 }
-                if (Objects.nonNull(next.getRight())) {
+                if (Objects.nonNull(before.getRight())) {
                     next = before.getRight();
+                    return;
                 }
                 BinTree<T> parent = before.getParent();
                 while (Objects.nonNull(parent) && parent.getRight() == before) {
@@ -52,7 +79,6 @@ public abstract class AbstractBinTree<T> implements BinTree<T> {
                     before = null;
                 }
             }
-            return before;
         }
     }
 
@@ -63,9 +89,7 @@ public abstract class AbstractBinTree<T> implements BinTree<T> {
         }
 
         @Override
-        public BinTree<T> next() {
-            before = next;
-            next = null;
+        protected void getNext() {
             if (Objects.nonNull(before)) {
                 if (Objects.nonNull(before.getRight())) {
                     next = before.getRight().getLeftest();
@@ -78,12 +102,11 @@ public abstract class AbstractBinTree<T> implements BinTree<T> {
                     next = parent;
                 }
             }
-            return before;
         }
     }
 
-    private BinTree<T> getFirstForLrd() {
-        BinTree<T> first = this;
+    private static <T> BinTree<T> getFirstForLrd(BinTree<T> binTree) {
+        BinTree<T> first = binTree;
         while (true){
             first = first.getLeftest();
             if (Objects.isNull(first.getRight())) {
@@ -96,14 +119,54 @@ public abstract class AbstractBinTree<T> implements BinTree<T> {
     }
 
     protected class LrdIterator<T> extends AbstractBinTreeIterator<T> {
-
         protected LrdIterator() {
-            super(AbstractBinTree.this.getFirstForLrd());
+            super(AbstractBinTree.getFirstForLrd(AbstractBinTree.this));
         }
 
         @Override
-        public BinTree<T> next() {
-            return null;
+        protected void getNext() {
+            if (Objects.nonNull(before)) {
+                BinTree<T> parent = before.getParent();
+                if (Objects.nonNull(parent) && parent.getLeft() == before && Objects.nonNull(parent.getRight())) {
+                    parent = AbstractBinTree.getFirstForLrd(parent.getRight());
+                }
+                next = parent;
+            }
+        }
+    }
+
+    protected class LevelIterator<T> extends AbstractBinTreeIterator<T> {
+        List<BinTree<T>> queue = new LinkedList<>();
+        /**
+         * TRUE  -> LEFT
+         * FALSE -> RIGHT
+         */
+        boolean leftRightFlag = true;
+
+        protected LevelIterator() {
+            super(AbstractBinTree.this);
+        }
+
+        @Override
+        protected void getNext() {
+            if (Objects.nonNull(before)) {
+                queue.add(before);
+            }
+            if (queue.isEmpty()) {
+                before = null;
+            } else {
+                BinTree<T> head = queue.get(0);
+                boolean flag = head.getLeft() == before;
+                while (!queue.isEmpty() && Objects.isNull(next)) {
+                    if (flag) {
+                        next = head.getRight();
+                        queue.remove(0);
+                        head = queue.get(0);
+                    } else {
+                        next = head.getLeft();
+                    }
+                }
+            }
         }
     }
 }
