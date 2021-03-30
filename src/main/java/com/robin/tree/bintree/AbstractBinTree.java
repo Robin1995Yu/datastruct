@@ -12,6 +12,7 @@ public abstract class AbstractBinTree<T> implements BinTree<T> {
         return new DlrIterator<>();
     }
 
+
     @Override
     public Iterator<BinTree<T>> ldrIterator() {
         return new LdrIterator<>();
