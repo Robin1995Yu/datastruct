@@ -83,4 +83,9 @@ public class LinkedBinTree<T> extends AbstractBinTree<T> {
         }
         return result;
     }
+
+    @Override
+    public String toString() {
+        return value.toString();
+    }
 }

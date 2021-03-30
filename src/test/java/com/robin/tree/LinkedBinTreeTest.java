@@ -132,19 +132,23 @@ public class LinkedBinTreeTest extends TestCase {
         assertEquals(ans, res);
     }
 
-//    @Ignore
-//    public void testLevelIterator() {
-//        tree.setLeft(left);
-//        tree.setRight(right);
-//        Iterator<BinTree<String>> it = tree.levelIterator();
-//        List<BinTree<String>> ans = new ArrayList<>(3);
-//        ans.add(tree);
-//        ans.add(left);
-//        ans.add(right);
-//        List<BinTree<String>> res = new ArrayList<>(3);
-//        while (it.hasNext()) {
-//            res.add(it.next());
-//        }
-//        assertEquals(ans, res);
-//    }
+    @Ignore
+    public void testLevelIterator() {
+        tree.setLeft(left);
+        tree.setRight(right);
+        left.setLeft(leftLeft);
+        right.setRight(rightRight);
+        Iterator<BinTree<String>> it = tree.levelIterator();
+        List<BinTree<String>> ans = new ArrayList<>(5);
+        ans.add(tree);
+        ans.add(left);
+        ans.add(right);
+        ans.add(leftLeft);
+        ans.add(rightRight);
+        List<BinTree<String>> res = new ArrayList<>(5);
+        while (it.hasNext()) {
+            res.add(it.next());
+        }
+        assertEquals(ans, res);
+    }
 }

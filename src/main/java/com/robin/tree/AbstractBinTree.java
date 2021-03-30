@@ -149,19 +149,20 @@ public abstract class AbstractBinTree<T> implements BinTree<T> {
         protected void getNext() {
             if (Objects.nonNull(before)) {
                 queue.add(before);
-            }
-            if (queue.isEmpty()) {
-                before = null;
-            } else {
-                BinTree<T> head = queue.get(0);
-                boolean flag = head.getLeft() == before;
-                while (!queue.isEmpty() && Objects.isNull(next)) {
-                    if (flag) {
-                        next = head.getRight();
-                        queue.remove(0);
-                        head = queue.get(0);
-                    } else {
-                        next = head.getLeft();
+                if (!queue.isEmpty()) {
+                    BinTree<T> head = queue.get(0);
+                    boolean flag = head.getLeft() == before;
+                    while (!queue.isEmpty() && Objects.isNull(next)) {
+                        if (flag) {
+                            next = head.getRight();
+                            queue.remove(0);
+                            if (!queue.isEmpty()) {
+                                head = queue.get(0);
+                            }
+                        } else {
+                            next = head.getLeft();
+                        }
+                        flag = !flag;
                     }
                 }
             }

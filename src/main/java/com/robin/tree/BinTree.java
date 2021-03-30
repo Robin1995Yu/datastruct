@@ -31,7 +31,7 @@ public interface BinTree<T> {
 
     default BinTree<T> getLeftest() {
         BinTree<T> result = this;
-        if (Objects.nonNull(result.getLeft())) {
+        while (Objects.nonNull(result.getLeft())) {
             result = result.getLeft();
         }
         return result;
@@ -39,7 +39,7 @@ public interface BinTree<T> {
 
     default BinTree<T> getRightest() {
         BinTree<T> result = this;
-        if (Objects.nonNull(result.getRight())) {
+        while (Objects.nonNull(result.getRight())) {
             result = result.getRight();
         }
         return result;
