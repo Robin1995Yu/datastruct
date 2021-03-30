@@ -1,4 +1,4 @@
-package com.robin.tree;
+package com.robin.tree.bintree;
 
 import java.util.Objects;
 
@@ -49,12 +49,12 @@ public class LinkedBinTree<T> extends AbstractBinTree<T> {
     }
 
     @Override
-    public BinTree<T> getLeft() {
+    public LinkedBinTree<T> getLeft() {
         return left;
     }
 
     @Override
-    public BinTree<T> setLeft(BinTree<T> left) {
+    public LinkedBinTree<T> setLeft(BinTree<T> left) {
         LinkedBinTree<T> result = this.left;
         this.left = getInstance(left);
         if (Objects.nonNull(this.left)) {
@@ -67,12 +67,12 @@ public class LinkedBinTree<T> extends AbstractBinTree<T> {
     }
 
     @Override
-    public BinTree<T> getRight() {
+    public LinkedBinTree<T> getRight() {
         return right;
     }
 
     @Override
-    public BinTree<T> setRight(BinTree<T> right) {
+    public LinkedBinTree<T> setRight(BinTree<T> right) {
         LinkedBinTree<T> result = this.right;
         this.right = getInstance(right);
         if (Objects.nonNull(this.right)) {
@@ -82,10 +82,5 @@ public class LinkedBinTree<T> extends AbstractBinTree<T> {
             result.parent = null;
         }
         return result;
-    }
-
-    @Override
-    public String toString() {
-        return value.toString();
     }
 }

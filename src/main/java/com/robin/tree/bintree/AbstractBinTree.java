@@ -1,4 +1,4 @@
-package com.robin.tree;
+package com.robin.tree.bintree;
 
 import java.util.Iterator;
 import java.util.LinkedList;
