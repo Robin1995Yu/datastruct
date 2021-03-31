@@ -82,6 +82,7 @@ public class BinSearchTreeMap<K, V> implements Map<K, V> {
             if (child != node.getLeft()) {
                 child.setRight(node.getLeft());
             }
+            child.setRight(node.getRight());
         }
         if (Objects.nonNull(node.getParent())) {
             if (node.getParent().getLeft() == node) {
@@ -121,7 +122,63 @@ public class BinSearchTreeMap<K, V> implements Map<K, V> {
 
     @Override
     public Set<Entry<K, V>> entrySet() {
-        return null;
+        return new EntrySet();
+    }
+
+    private class EntrySet extends AbstractSet<Entry<K,V>> {
+        @Override
+        public Iterator<Map.Entry<K,V>> iterator() {
+            return new EntryIterator();
+        }
+
+        @Override
+        public boolean contains(Object o) {
+            if (!(o instanceof Map.Entry)) {
+                return false;
+            }
+            K key = (K) ((Entry) o).getKey();
+            LinkedBinTree<BinSearchTreeMapEntry<K, V>> node = getNode(key);
+            return Objects.nonNull(node) && getCompareResult() == 0;
+        }
+
+        @Override
+        public boolean remove(Object o) {
+            if (!(o instanceof Map.Entry)) {
+                return false;
+            }
+            Map.Entry entry = (Map.Entry) o;
+            Object value = entry.getValue();
+            LinkedBinTree<BinSearchTreeMapEntry<K, V>> node = getNode((K) entry.getKey());
+            if (Objects.isNull(node) || getCompareResult() != 0) {
+                return false;
+            }
+            return Objects.equals(value, node.getValue().getValue());
+
+        }
+
+        @Override
+        public int size() {
+            return BinSearchTreeMap.this.size();
+        }
+
+        @Override
+        public void clear() {
+            BinSearchTreeMap.this.clear();
+        }
+    }
+
+    private class EntryIterator implements Iterator<Entry<K, V>> {
+        private Iterator it = BinSearchTreeMap.this.tree.ldrIterator();
+
+        @Override
+        public boolean hasNext() {
+            return it.hasNext();
+        }
+
+        @Override
+        public Entry<K, V> next() {
+            return (Entry<K, V>) ((BinTree) it.next()).getValue();
+        }
     }
 
     private static class BinSearchTreeMapEntry<K, V> implements Entry<K, V> {
