@@ -80,8 +80,9 @@ public class BinSearchTreeMap<K, V> implements Map<K, V> {
         } else {
             child = (LinkedBinTree<BinSearchTreeMapEntry<K, V>>) node.getLeft().getRightest();
             if (child != node.getLeft()) {
-                child.setRight(node.getLeft());
+                child.setLeft(node.getLeft());
             }
+            child.setRight(node.getRight());
         }
         if (Objects.nonNull(node.getParent())) {
             if (node.getParent().getLeft() == node) {
