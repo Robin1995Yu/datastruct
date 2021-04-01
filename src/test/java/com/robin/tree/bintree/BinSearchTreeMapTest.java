@@ -3,13 +3,14 @@ package com.robin.tree.bintree;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Iterator;
 import java.util.Map;
 
 import static org.junit.Assert.*;
 
 public class BinSearchTreeMapTest {
 
-    Map<Integer, Integer> map = new BinSearchTreeMap<>();
+    BinSearchTreeMap<Integer, Integer> map = new BinSearchTreeMap<>();
 
     @Before
     public void before() {
@@ -132,5 +133,15 @@ public class BinSearchTreeMapTest {
 
     @Test
     public void testEntrySet() {
+    }
+
+    @Test
+    public void test() {
+        Iterator<Map.Entry<Integer, Integer>> it = map.getIt();
+        while (it.hasNext()) {
+            Map.Entry<Integer, Integer> next = it.next();
+            System.out.println(next.getKey());
+            System.out.println(next.getValue());
+        }
     }
 }
