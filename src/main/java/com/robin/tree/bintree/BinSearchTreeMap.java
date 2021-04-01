@@ -79,10 +79,12 @@ public class BinSearchTreeMap<K, V> implements Map<K, V> {
             }
         } else {
             child = (LinkedBinTree<BinSearchTreeMapEntry<K, V>>) node.getLeft().getRightest();
+            child.setRight(node.getRight());
             if (child != node.getLeft()) {
                 child.setLeft(node.getLeft());
+                child.getParent().setRight(child.getRight());
+                child.setRight(null);
             }
-            child.setRight(node.getRight());
         }
         if (Objects.nonNull(node.getParent())) {
             if (node.getParent().getLeft() == node) {
@@ -112,7 +114,7 @@ public class BinSearchTreeMap<K, V> implements Map<K, V> {
 
     @Override
     public Set<K> keySet() {
-        return null;
+        return new KeySet();
     }
 
     @Override
@@ -165,10 +167,11 @@ public class BinSearchTreeMap<K, V> implements Map<K, V> {
         public void clear() {
             BinSearchTreeMap.this.clear();
         }
+
     }
 
     private class EntryIterator implements Iterator<Entry<K, V>> {
-        private Iterator it = BinSearchTreeMap.this.tree.ldrIterator();
+        private Iterator<BinSearchTreeMapEntry<K, V>> it = BinSearchTreeMap.this.tree.ldrIterator();
 
         @Override
         public boolean hasNext() {
@@ -177,7 +180,73 @@ public class BinSearchTreeMap<K, V> implements Map<K, V> {
 
         @Override
         public Entry<K, V> next() {
-            return (Entry<K, V>) ((BinTree) it.next()).getValue();
+            return it.next();
+        }
+    }
+
+    private class KeySet extends AbstractSet<K> {
+        @Override
+        public Iterator<K> iterator() {
+            return new KeyIterator();
+        }
+
+        @Override
+        public boolean contains(Object o) {
+            return BinSearchTreeMap.this.containsKey(o);
+        }
+
+        @Override
+        public boolean remove(Object o) {
+            return Objects.nonNull(BinSearchTreeMap.this.remove(o));
+        }
+
+        @Override
+        public int size() {
+            return BinSearchTreeMap.this.size();
+        }
+
+        @Override
+        public void clear() {
+            BinSearchTreeMap.this.clear();
+        }
+
+        private class KeyIterator implements Iterator<K> {
+            Iterator<Entry<K, V>> it = new EntryIterator();
+
+            @Override
+            public boolean hasNext() {
+                return it.hasNext();
+            }
+
+            @Override
+            public K next() {
+                return it.next().getKey();
+            }
+        }
+    }
+
+    private class Values extends AbstractCollection<V> {
+        @Override
+        public Iterator<V> iterator() {
+            return new ValueIterator();
+        }
+
+        @Override
+        public int size() {
+            return BinSearchTreeMap.this.size();
+        }
+
+        private class ValueIterator implements Iterator<V> {
+            private Iterator<Entry<K, V>> it = new EntryIterator();
+            @Override
+            public boolean hasNext() {
+                return it.hasNext();
+            }
+
+            @Override
+            public V next() {
+                return it.next().getValue();
+            }
         }
     }
 

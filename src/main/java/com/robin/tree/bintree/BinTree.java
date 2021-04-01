@@ -21,13 +21,13 @@ public interface BinTree<T> {
 
     BinTree<T> setRight(BinTree<T> right);
 
-    Iterator<BinTree<T>> dlrIterator();
+    Iterator<T> dlrIterator();
 
-    Iterator<BinTree<T>> ldrIterator();
+    Iterator<T> ldrIterator();
 
-    Iterator<BinTree<T>> lrdIterator();
+    Iterator<T> lrdIterator();
 
-    Iterator<BinTree<T>> levelIterator();
+    Iterator<T> levelIterator();
 
     default BinTree<T> getLeftest() {
         BinTree<T> result = this;

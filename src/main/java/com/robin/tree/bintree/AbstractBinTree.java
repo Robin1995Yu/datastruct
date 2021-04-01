@@ -8,26 +8,26 @@ import java.util.Objects;
 public abstract class AbstractBinTree<T> implements BinTree<T> {
 
     @Override
-    public Iterator<BinTree<T>> dlrIterator() {
-        return new DlrIterator<>();
+    public Iterator<T> dlrIterator() {
+        return new DlrIterator();
     }
 
     @Override
-    public Iterator<BinTree<T>> ldrIterator() {
-        return new LdrIterator<>();
+    public Iterator<T> ldrIterator() {
+        return new LdrIterator();
     }
 
     @Override
-    public Iterator<BinTree<T>> lrdIterator() {
-        return new LrdIterator<>();
+    public Iterator<T> lrdIterator() {
+        return new LrdIterator();
     }
 
     @Override
-    public Iterator<BinTree<T>> levelIterator() {
-        return new LevelIterator<>();
+    public Iterator<T> levelIterator() {
+        return new LevelIterator();
     }
 
-    private abstract class AbstractBinTreeIterator<T> implements Iterator<BinTree<T>> {
+    private abstract class AbstractBinTreeIterator implements Iterator<T> {
         protected BinTree<T> before;
         protected BinTree<T> next;
 
@@ -41,17 +41,17 @@ public abstract class AbstractBinTree<T> implements BinTree<T> {
         }
 
         @Override
-        public BinTree<T> next() {
+        public T next() {
             before = next;
             next = null;
             getNext();
-            return before;
+            return before.getValue();
         }
 
         protected abstract void getNext();
     }
 
-    protected class DlrIterator<T> extends AbstractBinTreeIterator<T> {
+    protected class DlrIterator extends AbstractBinTreeIterator {
 
         protected DlrIterator() {
             super(AbstractBinTree.this);
@@ -79,7 +79,7 @@ public abstract class AbstractBinTree<T> implements BinTree<T> {
         }
     }
 
-    protected class LdrIterator<T> extends AbstractBinTreeIterator<T> {
+    protected class LdrIterator extends AbstractBinTreeIterator {
 
         protected LdrIterator() {
             super(AbstractBinTree.this.getLeftest());
@@ -116,7 +116,7 @@ public abstract class AbstractBinTree<T> implements BinTree<T> {
         return first;
     }
 
-    protected class LrdIterator<T> extends AbstractBinTreeIterator<T> {
+    protected class LrdIterator extends AbstractBinTreeIterator {
         protected LrdIterator() {
             super(AbstractBinTree.getFirstForLrd(AbstractBinTree.this));
         }
@@ -133,14 +133,8 @@ public abstract class AbstractBinTree<T> implements BinTree<T> {
         }
     }
 
-    protected class LevelIterator<T> extends AbstractBinTreeIterator<T> {
+    protected class LevelIterator extends AbstractBinTreeIterator {
         List<BinTree<T>> queue = new LinkedList<>();
-        /**
-         * TRUE  -> LEFT
-         * FALSE -> RIGHT
-         */
-        boolean leftRightFlag = true;
-
         protected LevelIterator() {
             super(AbstractBinTree.this);
         }
