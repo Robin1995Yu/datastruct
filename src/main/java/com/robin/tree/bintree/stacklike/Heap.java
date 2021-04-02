@@ -10,6 +10,12 @@ public class Heap<T> implements StackLike<T> {
 
     private Comparator<T> comparator;
 
+    public Heap() {}
+
+    public Heap(Comparator<T> comparator) {
+        this.comparator = comparator;
+    }
+
     @Override
     public int size() {
         return values.size();
