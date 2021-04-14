@@ -1,4 +1,4 @@
-package com.robin.tree.bintree.stacklike;
+package com.robin.stacklike;
 
 public interface StackLike<T> {
     void push(T t);
